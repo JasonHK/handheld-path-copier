@@ -13,6 +13,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/fsnotify/fsnotify"
+	"github.com/inconshreveable/mousetrap"
 	"github.com/jeandeaual/go-locale"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/spf13/cobra"
@@ -180,5 +181,13 @@ func run(cmd *cobra.Command, args []string) {
 
 func fatal(v ...any) {
 	fmt.Fprintln(os.Stderr, v...)
+	if mousetrap.StartedByExplorer() {
+		fmt.Println(localizer.MustLocalizeMessage(&i18n.Message{
+			ID:    "message_press_enter",
+			Other: "Press Enter to continue...",
+		}))
+		fmt.Scanln()
+	}
+
 	os.Exit(1)
 }
