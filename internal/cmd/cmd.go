@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"embed"
 	"errors"
 	"fmt"
 	"log"
@@ -11,20 +10,11 @@ import (
 	"path/filepath"
 	"syscall"
 
-	"github.com/BurntSushi/toml"
+	"github.com/JasonHK/handheld-path-copier/internal/locales"
 	"github.com/fsnotify/fsnotify"
-	"github.com/jeandeaual/go-locale"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/spf13/cobra"
 	"golang.design/x/clipboard"
-	"golang.org/x/text/language"
-)
-
-var (
-	// go:embed locale.*.toml
-	localeFS  embed.FS
-	bundle    *i18n.Bundle
-	localizer *i18n.Localizer
 )
 
 var (
@@ -40,12 +30,6 @@ var command = &cobra.Command{
 }
 
 func init() {
-	locales, _ := locale.GetLocales()
-	bundle = i18n.NewBundle(language.English)
-	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
-	bundle.LoadMessageFileFS(localeFS, "locale.zh.toml")
-	localizer = i18n.NewLocalizer(bundle, locales...)
-
 	cobra.MousetrapHelpText = ""
 
 	defaultDir, _ = os.Getwd()
@@ -69,7 +53,7 @@ func Execute(version string) {
 }
 
 func run(cmd *cobra.Command, args []string) {
-	fmt.Println(localizer.MustLocalize(&i18n.LocalizeConfig{
+	fmt.Println(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
 			ID:    "title",
 			Other: "Handheld Data Path Copier version {{.Version}} by Jason Kwok",
@@ -93,7 +77,7 @@ func run(cmd *cobra.Command, args []string) {
 		if err != nil {
 			switch {
 			case errors.Is(err, os.ErrNotExist):
-				fatal(localizer.MustLocalize(&i18n.LocalizeConfig{
+				fatal(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
 					DefaultMessage: &i18n.Message{
 						ID:    "error_path_not_exist",
 						Other: "The path \"{{.Path}}\" does not exist!",
@@ -106,7 +90,7 @@ func run(cmd *cobra.Command, args []string) {
 		}
 
 		if !info.IsDir() {
-			fatal(localizer.MustLocalize(&i18n.LocalizeConfig{
+			fatal(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
 				DefaultMessage: &i18n.Message{
 					ID:    "error_path_not_folder",
 					Other: "The path \"{{.Path}}\" is not a folder!",
@@ -136,7 +120,7 @@ func run(cmd *cobra.Command, args []string) {
 
 				if event.Has(fsnotify.Create) || event.Has(fsnotify.Rename) {
 					if matched, _ := filepath.Match(matchPattern, filepath.Base(event.Name)); matched {
-						fmt.Println(localizer.MustLocalize(&i18n.LocalizeConfig{
+						fmt.Println(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
 							DefaultMessage: &i18n.Message{
 								ID:    "message_copied",
 								Other: "Copied \"{{.Name}}\" to clipboard.",
@@ -164,7 +148,7 @@ func run(cmd *cobra.Command, args []string) {
 	if err != nil {
 		fatal(err)
 	}
-	fmt.Println(localizer.MustLocalize(&i18n.LocalizeConfig{
+	fmt.Println(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
 			ID:    "message_watching",
 			Other: "Started watching \"{{.Dir}}\" for new handheld data. Press Ctrl-C to stop.",
