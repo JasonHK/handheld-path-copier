@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/BurntSushi/toml v1.6.0
+	github.com/adrg/xdg v0.5.2
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/jeandeaual/go-locale v0.0.0-20250612000132-0ef82f21eade
 	github.com/nicksnyder/go-i18n/v2 v2.5.1

@@ -12,6 +12,7 @@ import (
 	"syscall"
 
 	"github.com/BurntSushi/toml"
+	"github.com/adrg/xdg"
 	"github.com/fsnotify/fsnotify"
 	"github.com/jeandeaual/go-locale"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -27,8 +28,9 @@ var (
 	localizer *i18n.Localizer
 )
 
+var defaultDir = xdg.UserDirs.Download
+
 var (
-	defaultDir   string
 	matchPattern string
 	runOnce      bool
 )
@@ -47,14 +49,6 @@ func init() {
 	localizer = i18n.NewLocalizer(bundle, locales...)
 
 	cobra.MousetrapHelpText = ""
-
-	defaultDir, _ = os.Getwd()
-	if homeDir, err := os.UserHomeDir(); err == nil {
-		downloadsFolder := filepath.Join(homeDir, "Downloads")
-		if info, err := os.Stat(downloadsFolder); err == nil && info.IsDir() {
-			defaultDir = downloadsFolder
-		}
-	}
 
 	command.Flags().StringVar(&matchPattern, "match", "*.dat", "pattern to match the files")
 	command.Flags().BoolVar(&runOnce, "once", false, "copy the path once, then exit the program")
