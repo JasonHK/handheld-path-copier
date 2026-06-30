@@ -56,7 +56,7 @@ func run(cmd *cobra.Command, args []string) {
 	fmt.Println(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
 			ID:    "title",
-			Other: "Handheld Data Path Copier version {{.Version}} by Jason Kwok",
+			Other: "Handheld Data Path Copier v{{.Version}} by Jason",
 		},
 		TemplateData: cmd,
 	}))

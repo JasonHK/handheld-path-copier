@@ -1,0 +1,5 @@
+error_path_not_exist = "The path \"{{.Path}}\" does not exist!"
+error_path_not_folder = "The path \"{{.Path}}\" is not a folder!"
+message_copied = "Copied \"{{.Name}}\" to clipboard."
+message_watching = "Started watching \"{{.Dir}}\" for new handheld data. Press Ctrl-C to stop."
+title = "Handheld Data Path Copier v{{.Version}} by Jason"
