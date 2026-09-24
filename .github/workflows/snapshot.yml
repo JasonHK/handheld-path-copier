@@ -1,0 +1,62 @@
+name: Snapshot
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    if: "${{ github.event_name == 'workflow_dispatch' || !startsWith(github.event.head_commit.message, 'chore(master): release') }}"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Install 32-bit C toolchain
+        run: sudo apt-get update && sudo apt-get install -y gcc-multilib libx11-dev
+
+      - name: Build snapshot with GoReleaser
+        uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94
+        with:
+          distribution: goreleaser
+          version: 2.18.2
+          args: release --snapshot --clean
+
+      - name: Upload snapshot artifact (linux_amd64)
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          path: ./dist/handheld-path-copier_*_linux_amd64.tar.gz
+          archive: false
+          if-no-files-found: error
+
+      - name: Upload snapshot artifact (linux_i386)
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          path: ./dist/handheld-path-copier_*_linux_i386.tar.gz
+          archive: false
+          if-no-files-found: error
+
+      - name: Upload snapshot artifact (windows_amd64)
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          path: ./dist/handheld-path-copier_*_windows_amd64.zip
+          archive: false
+          if-no-files-found: error
+
+      - name: Upload snapshot artifact (windows_x86)
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          path: ./dist/handheld-path-copier_*_windows_x86.zip
+          archive: false
+          if-no-files-found: error

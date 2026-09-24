@@ -11,7 +11,7 @@ version: 2
 before:
   hooks:
     # You may remove this if you don't use go modules.
-    - go1.20.14 mod tidy
+    - go mod tidy
 
 builds:
   - id: handheld-path-copier-linux
@@ -23,7 +23,6 @@ builds:
     goarch:
       - amd64
       - "386"
-    tool: go1.20.14
 
   - id: handheld-path-copier-windows
     main: ./cmd/handheld-path-copier
@@ -34,14 +33,12 @@ builds:
     goarch:
       - amd64
       - "386"
-    tool: go1.20.14
 
 archives:
   - formats: [tar.gz]
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
-      {{ .ProjectName }}_
-      {{- .Version }}_
+      {{ .ProjectName }}_v{{- .Version }}_
       {{- .Os }}_
       {{- if eq .Arch "386" }}{{ if eq .Os "windows" }}x86{{ else }}i386{{ end }}
       {{- else }}{{ .Arch }}{{ end }}
