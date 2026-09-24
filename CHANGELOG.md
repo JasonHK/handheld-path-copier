@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/JasonHK/handheld-path-copier/compare/v1.0.0...v1.1.0) (2026-09-24)
+
+
+### Features
+
+* add mousetrap for Windows Explorer on fatal error ([#1](https://github.com/JasonHK/handheld-path-copier/issues/1)) ([5a40c8a](https://github.com/JasonHK/handheld-path-copier/commit/5a40c8aa548f18bfef1a8884598d3da6701b9cdc))
+
 ## 1.0.0 (2026-09-24)
 
 
