@@ -10,6 +10,10 @@ other = "路徑「{{.Path}}」不是資料夾！"
 hash = "sha1-ee5a407b7752c30138f4ae8fa7190ec7779db409"
 other = "已複製「{{.Name}}」到剪貼簿。"
 
+[message_press_enter]
+hash = "sha1-66286a85428809c2b9fc84855f7000888a1ffffa"
+other = "按 Enter 鍵繼續..."
+
 [message_watching]
 hash = "sha1-5d24b624b5e972e7603f7cdc4197cf05b44618d3"
 other = "正在監視「{{.Dir}}」的上數檔案。按 Ctrl-C 以結束。"
