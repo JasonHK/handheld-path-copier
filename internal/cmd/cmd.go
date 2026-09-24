@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -47,15 +46,6 @@ func Execute(version string) {
 }
 
 func run(cmd *cobra.Command, args []string) {
-	fmt.Println(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "title",
-			Other: "Handheld Data Path Copier v{{.Version}}",
-		},
-		TemplateData: cmd,
-	}))
-	fmt.Println()
-
 	if err := clipboard.Init(); err != nil {
 		fatal(err)
 	}
@@ -66,40 +56,53 @@ func run(cmd *cobra.Command, args []string) {
 		if err != nil {
 			fatal(err)
 		}
+		dir = path
+	}
 
-		info, err := os.Stat(path)
-		if err != nil {
-			switch {
-			case errors.Is(err, os.ErrNotExist):
-				fatal(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
-					DefaultMessage: &i18n.Message{
-						ID:    "error_path_not_exist",
-						Other: "The path \"{{.Path}}\" does not exist!",
-					},
-					TemplateData: map[string]string{"Path": path},
-				}))
-			default:
-				fatal(err)
-			}
-		}
+	dir, err := filepath.Abs(dir)
+	if err != nil {
+		fatal(err)
+	}
 
-		if !info.IsDir() {
+	info, err := os.Stat(dir)
+	if err != nil {
+		switch {
+		case errors.Is(err, os.ErrNotExist):
 			fatal(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
 				DefaultMessage: &i18n.Message{
-					ID:    "error_path_not_folder",
-					Other: "The path \"{{.Path}}\" is not a folder!",
+					ID:    "error_path_not_exist",
+					Other: "The path \"{{.Path}}\" does not exist!",
 				},
-				TemplateData: map[string]string{"Path": path},
+				TemplateData: map[string]string{"Path": dir},
 			}))
+		default:
+			fatal(err)
 		}
+	}
 
-		dir = path
+	if !info.IsDir() {
+		fatal(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "error_path_not_folder",
+				Other: "The path \"{{.Path}}\" is not a folder!",
+			},
+			TemplateData: map[string]string{"Path": dir},
+		}))
 	}
 
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		log.Fatal(err)
+		fatal(err)
 	}
+
+	fmt.Println(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "title",
+			Other: "Handheld Data Path Copier v{{.Version}}",
+		},
+		TemplateData: cmd,
+	}))
+	fmt.Println()
 
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
