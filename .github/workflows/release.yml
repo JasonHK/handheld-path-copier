@@ -38,6 +38,9 @@ jobs:
           go-version-file: go.mod
           cache: true
 
+      - name: Install 32-bit C toolchain
+        run: sudo apt-get update && sudo apt-get install -y gcc-multilib libx11-dev
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94
         with:

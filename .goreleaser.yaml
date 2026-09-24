@@ -14,12 +14,22 @@ before:
     - go1.20.14 mod tidy
 
 builds:
-  - id: handheld-path-copier
+  - id: handheld-path-copier-linux
     main: ./cmd/handheld-path-copier
     env:
       - CGO_ENABLED=1
     goos:
       - linux
+    goarch:
+      - amd64
+      - "386"
+    tool: go1.20.14
+
+  - id: handheld-path-copier-windows
+    main: ./cmd/handheld-path-copier
+    env:
+      - CGO_ENABLED=0
+    goos:
       - windows
     goarch:
       - amd64
