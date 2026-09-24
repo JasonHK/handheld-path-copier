@@ -38,7 +38,8 @@ archives:
   - formats: [tar.gz]
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
-      {{ .ProjectName }}_v{{- .Version }}_
+      {{ .ProjectName }}_
+      {{- .Version }}_
       {{- .Os }}_
       {{- if eq .Arch "386" }}{{ if eq .Os "windows" }}x86{{ else }}i386{{ end }}
       {{- else }}{{ .Arch }}{{ end }}
