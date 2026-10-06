@@ -118,6 +118,7 @@ func run(cmd *cobra.Command, args []string) {
 
 				if event.Has(fsnotify.Create) || event.Has(fsnotify.Rename) {
 					if matched, _ := filepath.Match(matchPattern, filepath.Base(event.Name)); matched {
+						clipboard.Write(clipboard.FmtText, []byte(event.Name))
 						fmt.Println(locales.Localizer.MustLocalize(&i18n.LocalizeConfig{
 							DefaultMessage: &i18n.Message{
 								ID:    "message_copied",
@@ -125,7 +126,6 @@ func run(cmd *cobra.Command, args []string) {
 							},
 							TemplateData: event,
 						}))
-						clipboard.Write(clipboard.FmtText, []byte(event.Name))
 
 						if runOnce {
 							stop()
