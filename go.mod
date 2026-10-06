@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/BurntSushi/toml v1.6.0
-	github.com/adrg/xdg v0.5.2
+	github.com/adrg/xdg v0.5.3
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/inconshreveable/mousetrap v1.1.0
 	github.com/jeandeaual/go-locale v0.0.0-20250612000132-0ef82f21eade
