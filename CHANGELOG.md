@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/JasonHK/handheld-path-copier/compare/v1.1.0...v1.1.1) (2026-10-06)
+
+
+### Bug Fixes
+
+* clipboard message display before it was actually done ([#11](https://github.com/JasonHK/handheld-path-copier/issues/11)) ([c630fba](https://github.com/JasonHK/handheld-path-copier/commit/c630fba3fdea7907881a05724a0deaf6885922a2))
+
 ## [1.1.0](https://github.com/JasonHK/handheld-path-copier/compare/v1.0.0...v1.1.0) (2026-09-24)
 
 
